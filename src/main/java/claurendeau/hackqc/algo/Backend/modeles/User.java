@@ -3,17 +3,19 @@ package claurendeau.hackqc.algo.Backend.modeles;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.AccessType;
+import lombok.ToString;
 
 @Entity
 @Table(name = "USERS")
-@AccessType(AccessType.Type.FIELD)
+@Access(AccessType.FIELD)
 @NoArgsConstructor
 @Getter
+@ToString
 public class User {
 
     @Id
     @GeneratedValue
+    @Column(name = "ID")
     private Long id;
 
     @Column(name = "LAST_NAME")
