@@ -1,9 +1,11 @@
 package claurendeau.hackqc.algo.Backend.modeles;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "USERS")
@@ -11,6 +13,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Getter
 @ToString
+@SuperBuilder
 public class User {
 
     @Id
