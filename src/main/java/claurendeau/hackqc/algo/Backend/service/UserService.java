@@ -5,6 +5,8 @@ import claurendeau.hackqc.algo.Backend.mapper.UserMapper;
 import claurendeau.hackqc.algo.Backend.modeles.User;
 import claurendeau.hackqc.algo.Backend.repository.UserRepository;
 import com.google.common.hash.Hashing;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,5 +33,23 @@ public class UserService {
                 .build());
 
         return UserMapper.toUserDTO(user);
+    }
+
+    @Transactional
+    public String login(String email, String password) {
+        if (email == null || password == null
+            || email.isEmpty() || password.isEmpty()
+            || email.isBlank() || password.isBlank()){
+            throw new IllegalArgumentException("All fields are required");
+        }
+
+        String passwordHash = Hashing.sha256().hashString(password, StandardCharsets.UTF_8).toString();
+
+        User user = userRepository.findByEmailAndPasswordHash(email, passwordHash)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+
+
+        return null;
     }
 }
