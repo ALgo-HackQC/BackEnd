@@ -1,16 +1,16 @@
 package claurendeau.hackqc.algo.Backend.service;
 
-import claurendeau.hackqc.algo.Backend.repository.UtilisateurRepository;
+import claurendeau.hackqc.algo.Backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UtilisateurService {
+public class UserService {
 
     @Autowired
-    private UtilisateurRepository utilisateurRepository;
+    private UserRepository userRepository;
 
-    public void creeUtilisateur() {
+    public void createUser() {
         // TODO
     }
 }
