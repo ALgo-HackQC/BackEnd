@@ -1,4 +1,4 @@
 package claurendeau.hackqc.algo.Backend.dto;
 
-public record UserConnexionDTO(String email, String password) {
+public record UserConnectionDTO(String email, String password) {
 }
