@@ -37,4 +37,26 @@ public class UserServiceTest {
         assertEquals(email, userDTO.email());
     }
 
+    @Test
+    public void test_createUser_erreur_valeurNull() {
+        String lastName = null;
+        String firstName = "Firstname";
+        String email = "email@email.com";
+        String password = "test";
+
+        assertThrows(IllegalArgumentException.class,
+                () -> userService.createUser(lastName, firstName, email, password));
+    }
+
+    @Test
+    public void test_createUser_erreur_valeurVide() {
+        String lastName = "";
+        String firstName = "Firstname";
+        String email = "email@email.com";
+        String password = "test";
+
+        assertThrows(IllegalArgumentException.class,
+                () -> userService.createUser(lastName, firstName, email, password));
+    }
+
 }

@@ -40,5 +40,41 @@ public class UserControllerTest {
         ).andExpect(status().isCreated());
     }
 
+    @Test
+    public void test_createUser_erreurBadRequest_valeurNull() throws Exception {
+
+        UserCreatorDTO userCreatorDTO = new UserCreatorDTO(null, "Firstname", "email", "password");
+        String userCreatorDTOString = om.writeValueAsString(userCreatorDTO);
+
+        mockMvc.perform(post("/utilisateur/cree")
+                .contentType("application/json")
+                .content(userCreatorDTOString)
+        ).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void test_createUser_erreurBadRequest_valeurVide() throws Exception {
+
+        UserCreatorDTO userCreatorDTO = new UserCreatorDTO("", "Firstname", "email", "password");
+        String userCreatorDTOString = om.writeValueAsString(userCreatorDTO);
+
+        mockMvc.perform(post("/utilisateur/cree")
+                .contentType("application/json")
+                .content(userCreatorDTOString)
+        ).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void test_createUser_erreurBadRequest_valeurBlanche() throws Exception {
+
+        UserCreatorDTO userCreatorDTO = new UserCreatorDTO("", "Firstname", "email", "password");
+        String userCreatorDTOString = om.writeValueAsString(userCreatorDTO);
+
+        mockMvc.perform(post("/utilisateur/cree")
+                .contentType("application/json")
+                .content(userCreatorDTOString)
+        ).andExpect(status().isBadRequest());
+    }
+
 
 }
