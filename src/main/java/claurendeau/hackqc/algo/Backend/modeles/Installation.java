@@ -27,7 +27,7 @@ public class Installation {
     @Column(name = "DESCRIPTION")
     private String description;
 
-    @Column(name = "LOCATION_ID")
+    @JoinColumn(name = "LOCATION_ID")
     @ManyToOne
     private Location location;
 

@@ -29,7 +29,7 @@ public class Authorization {
     @Column(name = "EXPIRATION")
     private Date expiration;
 
-    @Column(name = "USER_ID")
+    @JoinColumn(name = "USER_ID")
     @ManyToOne
     private User user;
 

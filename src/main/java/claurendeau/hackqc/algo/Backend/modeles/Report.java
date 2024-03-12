@@ -36,11 +36,11 @@ public class Report {
     @Column(name = "PROBLEM")
     private String problem;
 
-    @Column(name = "USER_ID")
+    @JoinColumn(name = "USER_ID")
     @ManyToOne
     private User user;
 
-    @Column(name = "INSTALLATION_ID")
+    @JoinColumn(name = "INSTALLATION_ID")
     @ManyToOne
     private Installation installation;
 
