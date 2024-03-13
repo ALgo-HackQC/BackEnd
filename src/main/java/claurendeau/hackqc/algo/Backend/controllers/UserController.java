@@ -1,5 +1,6 @@
 package claurendeau.hackqc.algo.Backend.controllers;
 
+import claurendeau.hackqc.algo.Backend.dto.ConnectionDTO;
 import claurendeau.hackqc.algo.Backend.dto.UserConnectionDTO;
 import claurendeau.hackqc.algo.Backend.dto.UserCreatorDTO;
 import claurendeau.hackqc.algo.Backend.service.UserService;
@@ -35,16 +36,16 @@ public class UserController {
     }
 
     @PostMapping("/connexion")
-    public ResponseEntity<String> login(@RequestBody UserConnectionDTO userConnectionDTO) {
-        String token;
+    public ResponseEntity<ConnectionDTO> login(@RequestBody UserConnectionDTO userConnectionDTO) {
+        ConnectionDTO token;
         try {
             token = userService.login(userConnectionDTO.email(), userConnectionDTO.password());
         } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (EntityNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(token, HttpStatus.OK);
+        return new ResponseEntity<>(token, HttpStatus.CREATED);
     }
 }
