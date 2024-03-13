@@ -8,12 +8,12 @@ import lombok.ToString;
 import java.sql.Date;
 
 @Entity
-@Table(name = "AUTHORIZATIONS")
+@Table(name = "CONNECTIONS")
 @Access(AccessType.FIELD)
 @NoArgsConstructor
 @Getter
 @ToString
-public class Authorization {
+public class Connection {
 
     @Id
     @GeneratedValue
@@ -33,7 +33,7 @@ public class Authorization {
     @ManyToOne
     private User user;
 
-    public Authorization(User user, String token, Date issueDate, Date expiration, Installation installation) {
+    public Connection(User user, String token, Date issueDate, Date expiration, Installation installation) {
         this.user = user;
         this.token = token;
         this.issueDate = issueDate;
