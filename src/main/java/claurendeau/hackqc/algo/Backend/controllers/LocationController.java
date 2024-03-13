@@ -1,5 +1,6 @@
 package claurendeau.hackqc.algo.Backend.controllers;
 
+import claurendeau.hackqc.algo.Backend.dto.LocationDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,8 +17,8 @@ public class LocationController {
     LocationService locationService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<String> getLocationById(@PathVariable Long id) {
-        String location = locationService.getLocationById(id).toString();
+    public ResponseEntity<LocationDTO> getLocationById(@PathVariable Long id) {
+        LocationDTO location = locationService.getLocationById(id);
         return new ResponseEntity<>(location, location == null ? org.springframework.http.HttpStatus.NOT_FOUND : org.springframework.http.HttpStatus.OK);
     }
 }
