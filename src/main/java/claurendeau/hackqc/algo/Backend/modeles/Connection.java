@@ -16,6 +16,7 @@ import java.sql.Date;
 @ToString
 @SuperBuilder
 public class Connection {
+    public final static int TOKEN_TIME_TO_LIVE_HOURS = 5;
 
     @Id
     @GeneratedValue
@@ -23,6 +24,7 @@ public class Connection {
     private Long id;
 
     @Column(name = "TOKEN")
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String token;
 
     @Column(name = "ISSUE_DATE")
