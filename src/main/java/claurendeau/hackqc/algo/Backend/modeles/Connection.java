@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 import java.sql.Date;
 
@@ -13,6 +14,7 @@ import java.sql.Date;
 @NoArgsConstructor
 @Getter
 @ToString
+@SuperBuilder
 public class Connection {
 
     @Id
