@@ -1,8 +1,12 @@
 package claurendeau.hackqc.algo.Backend.service;
 
+import claurendeau.hackqc.algo.Backend.dto.ConnectionDTO;
 import claurendeau.hackqc.algo.Backend.dto.UserDTO;
+import claurendeau.hackqc.algo.Backend.mapper.ConnectionMapper;
 import claurendeau.hackqc.algo.Backend.mapper.UserMapper;
+import claurendeau.hackqc.algo.Backend.modeles.Connection;
 import claurendeau.hackqc.algo.Backend.modeles.User;
+import claurendeau.hackqc.algo.Backend.repository.ConnectionRepository;
 import claurendeau.hackqc.algo.Backend.repository.UserRepository;
 import com.google.common.hash.Hashing;
 import jakarta.persistence.EntityNotFoundException;
@@ -11,12 +15,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
+import java.sql.Date;
+import java.time.temporal.ChronoUnit;
 
 @Service
 public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ConnectionRepository connectionRepository;
 
     public UserDTO createUser(String lastName, String firstName, String email, String password) {
         if (lastName == null || firstName == null || email == null || password == null
@@ -36,7 +46,7 @@ public class UserService {
     }
 
     @Transactional
-    public String login(String email, String password) {
+    public ConnectionDTO login(String email, String password) {
         if (email == null || password == null
             || email.isEmpty() || password.isEmpty()
             || email.isBlank() || password.isBlank()){
@@ -48,8 +58,14 @@ public class UserService {
         User user = userRepository.findByEmailAndPasswordHash(email, passwordHash)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
+        Connection connection = new Connection().builder()
+                .user(user)
+                .issueDate((Date) Date.from(Instant.now()))
+                .expiration((Date) Date.from(Instant.now().plus(
+                        Connection.TOKEN_TIME_TO_LIVE_HOURS,
+                        ChronoUnit.HOURS)))
+                .build();
 
-
-        return null;
+        return ConnectionMapper.toConnectionDTO(connectionRepository.save(connection));
     }
 }
