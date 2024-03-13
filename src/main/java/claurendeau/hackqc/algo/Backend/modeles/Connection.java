@@ -6,7 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
-import java.sql.Date;
+import java.util.Date;
+
 
 @Entity
 @Table(name = "CONNECTIONS")
@@ -18,12 +19,8 @@ import java.sql.Date;
 public class Connection {
     public final static int TOKEN_TIME_TO_LIVE_HOURS = 5;
 
-    @Id
-    @GeneratedValue
-    @Column(name = "ID")
-    private Long id;
-
     @Column(name = "TOKEN")
+    @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String token;
 

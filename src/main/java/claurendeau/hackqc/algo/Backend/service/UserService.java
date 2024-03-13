@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
-import java.sql.Date;
 import java.time.temporal.ChronoUnit;
 
 @Service
@@ -60,8 +59,8 @@ public class UserService {
 
         Connection connection = new Connection().builder()
                 .user(user)
-                .issueDate((Date) Date.from(Instant.now()))
-                .expiration((Date) Date.from(Instant.now().plus(
+                .issueDate(java.util.Date.from(Instant.now()))
+                .expiration(java.util.Date.from(Instant.now().plus(
                         Connection.TOKEN_TIME_TO_LIVE_HOURS,
                         ChronoUnit.HOURS)))
                 .build();
