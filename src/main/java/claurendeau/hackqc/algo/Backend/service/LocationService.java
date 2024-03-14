@@ -14,4 +14,8 @@ public class LocationService {
     public LocationDTO getLocationById(Long id) {
         return locationRepository.findById(id).map(LocationMapper::toDTO).orElse(null);
     }
+
+    public LocationDTO createLocation(LocationDTO locationDTO) {
+        return LocationMapper.toDTO(locationRepository.save(LocationMapper.toEntity(locationDTO)));
+    }
 }
