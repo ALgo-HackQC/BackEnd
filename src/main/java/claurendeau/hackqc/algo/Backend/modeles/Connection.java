@@ -4,23 +4,24 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
-import java.sql.Date;
+import java.util.Date;
+
 
 @Entity
-@Table(name = "AUTHORIZATIONS")
+@Table(name = "CONNECTIONS")
 @Access(AccessType.FIELD)
 @NoArgsConstructor
 @Getter
 @ToString
-public class Authorization {
-
-    @Id
-    @GeneratedValue
-    @Column(name = "ID")
-    private Long id;
+@SuperBuilder
+public class Connection {
+    public final static int TOKEN_TIME_TO_LIVE_HOURS = 5;
 
     @Column(name = "TOKEN")
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String token;
 
     @Column(name = "ISSUE_DATE")
@@ -33,7 +34,7 @@ public class Authorization {
     @ManyToOne
     private User user;
 
-    public Authorization(User user, String token, Date issueDate, Date expiration, Installation installation) {
+    public Connection(User user, String token, Date issueDate, Date expiration, Installation installation) {
         this.user = user;
         this.token = token;
         this.issueDate = issueDate;
