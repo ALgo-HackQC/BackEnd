@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "INSTALLATIONS")
@@ -11,6 +12,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Getter
 @ToString
+@SuperBuilder
 public class Installation {
 
     @Id
