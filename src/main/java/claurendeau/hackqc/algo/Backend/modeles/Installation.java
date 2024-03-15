@@ -33,6 +33,12 @@ public class Installation {
     @ManyToOne
     private Location location;
 
+    @Column(name = "VOTES_FOR")
+    private int votesPour;
+
+    @Column(name = "VOTES_AGAINST")
+    private int votesContre;
+
     public Installation(String name, String type, String description) {
         this.name = name;
         this.type = type;
