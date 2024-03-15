@@ -8,6 +8,7 @@ public class LocationMapper {
         return new LocationDTO(location.getId(), location.getName());
     }
     public static Location toEntity(LocationDTO locationDTO) {
+        if (locationDTO == null) return null;
         return Location.builder()
                 .id(locationDTO.id())
                 .name(locationDTO.name())

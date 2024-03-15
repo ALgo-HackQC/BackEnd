@@ -5,6 +5,7 @@ import claurendeau.hackqc.algo.Backend.modeles.User;
 
 public class UserMapper {
     public static UserDTO toUserDTO(User user) {
+        if (user == null) return null;
         return new UserDTO(user.getId(), user.getLastName(), user.getFirstName(), user.getEmail());
     }
 }
