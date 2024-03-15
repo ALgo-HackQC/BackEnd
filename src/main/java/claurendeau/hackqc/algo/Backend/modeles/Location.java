@@ -8,7 +8,7 @@ import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.AccessType;
 
 @Entity
-@Table(name = "LOCATIONS")
+@Table(name = "COORDONNEE")
 @AccessType(AccessType.Type.FIELD)
 @NoArgsConstructor
 @Getter
