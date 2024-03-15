@@ -37,7 +37,7 @@ public class InstallationServiceTest {
     @BeforeAll
     void initialisation() {
 
-        Long id = locationRepository.save(new Location(90,90)).getId();
+        Long id = locationRepository.save(new Location("parc")).getId();
 
         createdInstallations.add(new InstallationCreatorDTO("name", "type", "description", id));
 

@@ -21,14 +21,10 @@ public class Location {
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "LATITUDE")
-    private double latitude;
+    @Column(name = "NAME")
+    private String name;
 
-    @Column(name = "LONGITUDE")
-    private double longitude;
-
-    public Location(double latitude, double longitude) {
-        this.latitude = latitude;
-        this.longitude = longitude;
+    public Location(String name) {
+        this.name = name;
     }
 }
