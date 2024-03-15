@@ -1,13 +1,18 @@
 package claurendeau.hackqc.algo.Backend.service;
 
+import claurendeau.hackqc.algo.Backend.dto.ConnectionDTO;
+import claurendeau.hackqc.algo.Backend.dto.UserCreatorDTO;
 import claurendeau.hackqc.algo.Backend.dto.UserDTO;
+import claurendeau.hackqc.algo.Backend.repository.ConnectionRepository;
 import claurendeau.hackqc.algo.Backend.repository.UserRepository;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestMethodOrder;
+import jakarta.persistence.EntityNotFoundException;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.crossstore.ChangeSetPersister;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,8 +23,23 @@ public class UserServiceTest {
 
     @Autowired
     UserService userService;
+
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    ConnectionRepository connectionRepository;
+
+    List<UserCreatorDTO> createdUsers = new ArrayList<>();
+
+    @BeforeAll
+    void initialisation() {
+        createdUsers.add(new UserCreatorDTO("Lastname", "Firstname", "email11111112@email.com", "password"));
+
+        createdUsers.forEach((userCreatorDTO) -> userService.createUser(
+                userCreatorDTO.lastName(), userCreatorDTO.firstName(),
+                userCreatorDTO.email(), userCreatorDTO.password()));
+    }
 
     @Test
     public void test_createUser_normal() {
@@ -57,6 +77,31 @@ public class UserServiceTest {
 
         assertThrows(IllegalArgumentException.class,
                 () -> userService.createUser(lastName, firstName, email, password));
+    }
+
+    @Test
+    public void test_login_normal() {
+
+        ConnectionDTO connectionDTO = userService.login(createdUsers.getFirst().email(), createdUsers.getFirst().password());
+
+        System.out.println(connectionDTO);
+        assertTrue(connectionRepository.existsById(connectionDTO.token()));
+    }
+
+    @Test
+    public void test_login_erreur_passwordMauvais() {
+        assertThrows(EntityNotFoundException.class,
+                () -> userService.login(createdUsers.getFirst().email(), "wrong"));
+    }
+
+    @Test
+    public void test_login_erreur_valeurNullOuVide() {
+        assertThrows(IllegalArgumentException.class,
+                () -> userService.login(createdUsers.getFirst().email(), ""), "Empty check doesn't work");
+        assertThrows(IllegalArgumentException.class,
+                () -> userService.login(createdUsers.getFirst().email(), null), "Null check doesn't work");
+        assertThrows(IllegalArgumentException.class,
+                () -> userService.login(createdUsers.getFirst().email(), "    "), "Blank check doesn't work");
     }
 
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "INSTALLATIONS")
@@ -11,6 +12,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Getter
 @ToString
+@SuperBuilder
 public class Installation {
 
     @Id
@@ -30,6 +32,12 @@ public class Installation {
     @JoinColumn(name = "LOCATION_ID")
     @ManyToOne
     private Location location;
+
+    @Column(name = "VOTES_FOR")
+    private int votesPour;
+
+    @Column(name = "VOTES_AGAINST")
+    private int votesContre;
 
     public Installation(String name, String type, String description) {
         this.name = name;

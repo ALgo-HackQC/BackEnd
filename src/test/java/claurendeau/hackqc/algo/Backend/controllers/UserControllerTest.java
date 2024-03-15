@@ -1,17 +1,18 @@
 package claurendeau.hackqc.algo.Backend.controllers;
 
 
+import claurendeau.hackqc.algo.Backend.dto.UserConnectionDTO;
 import claurendeau.hackqc.algo.Backend.dto.UserCreatorDTO;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import claurendeau.hackqc.algo.Backend.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -26,9 +27,23 @@ public class UserControllerTest {
 
     @Autowired
     ObjectMapper om;
+    
+    @Autowired
+    UserService userService;
 
+    List<UserCreatorDTO> createdUsers = new ArrayList<>();
+
+    @BeforeAll
+    void initialisation() {
+        createdUsers.add(new UserCreatorDTO("Lastname", "Firstname", "email123@email.com", "password"));
+
+        createdUsers.forEach((userCreatorDTO) -> userService.createUser(
+                userCreatorDTO.lastName(), userCreatorDTO.firstName(),
+                userCreatorDTO.email(), userCreatorDTO.password()));
+    }
 
     @Test
+    @Order(1)
     public void test_createUser_normal() throws Exception {
 
         UserCreatorDTO userCreatorDTO = new UserCreatorDTO("Lastname", "Firstname", "email", "password");
@@ -76,5 +91,48 @@ public class UserControllerTest {
         ).andExpect(status().isBadRequest());
     }
 
+    @Test
+    @Order(2)
+    public void test_login_normal() throws Exception {
+        String email = "test11111@email.com";
+        String password = "Password";
+
+        UserConnectionDTO userConnectionDTO = new UserConnectionDTO(
+                createdUsers.getFirst().email(), createdUsers.getFirst().password());
+        String userConnectionDTOString = om.writeValueAsString(userConnectionDTO);
+
+        mockMvc.perform(post("/utilisateur/connexion")
+                .contentType("application/json")
+                .content(userConnectionDTOString)
+        ).andExpect(status().isCreated());
+    }
+
+    @Test
+    public void test_login_errorNotFound_mauvaisMDP() throws Exception {
+        String email = "test11111@email.com";
+        String password = "Passwd";
+
+        UserConnectionDTO userConnectionDTO = new UserConnectionDTO(email, password);
+        String userConnectionDTOString = om.writeValueAsString(userConnectionDTO);
+
+        mockMvc.perform(post("/utilisateur/connexion")
+                .contentType("application/json")
+                .content(userConnectionDTOString)
+        ).andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void test_login_errorBadReqest_emailVide() throws Exception {
+        String email = "";
+        String password = "Passwd";
+
+        UserConnectionDTO userConnectionDTO = new UserConnectionDTO(email, password);
+        String userConnectionDTOString = om.writeValueAsString(userConnectionDTO);
+
+        mockMvc.perform(post("/utilisateur/connexion")
+                .contentType("application/json")
+                .content(userConnectionDTOString)
+        ).andExpect(status().isBadRequest());
+    }
 
 }
