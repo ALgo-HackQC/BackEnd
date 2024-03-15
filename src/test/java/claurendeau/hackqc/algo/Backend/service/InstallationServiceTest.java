@@ -2,10 +2,12 @@ package claurendeau.hackqc.algo.Backend.service;
 
 import claurendeau.hackqc.algo.Backend.dto.InstallationCreatorDTO;
 import claurendeau.hackqc.algo.Backend.dto.InstallationDTO;
+import claurendeau.hackqc.algo.Backend.dto.LocationWithInstallationsDTO;
 import claurendeau.hackqc.algo.Backend.mapper.LocationMapper;
 import claurendeau.hackqc.algo.Backend.modeles.Location;
 import claurendeau.hackqc.algo.Backend.repository.InstallationRepository;
 import claurendeau.hackqc.algo.Backend.repository.LocationRepository;
+import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -38,14 +40,17 @@ public class InstallationServiceTest {
     void initialisation() {
 
         Long id = locationRepository.save(new Location("parc")).getId();
+        Long id2 = locationRepository.save(new Location("parc2")).getId();
 
         createdInstallations.add(new InstallationCreatorDTO("name", "type", "description", id));
+        createdInstallations.add(new InstallationCreatorDTO("name2", "type2", "description2", id));
+        createdInstallations.add(new InstallationCreatorDTO("name3", "type3", "description3", id2));
 
         Location location = LocationMapper.toEntity(locationService.getLocationById(1L));
 
         createdInstallations.forEach((installationCreatorDTO) -> installationService.createInstallation(
                 installationCreatorDTO.name(), installationCreatorDTO.type(),
-                installationCreatorDTO.description(), location));
+                installationCreatorDTO.description(), installationCreatorDTO.locationId()));
     }
 
     @Test
@@ -55,9 +60,8 @@ public class InstallationServiceTest {
         String description = "description";
         Long locationId = 1L;
 
-        Location location = LocationMapper.toEntity(locationService.getLocationById(locationId));
 
-        InstallationDTO installationDTO = installationService.createInstallation(name, type, description, location);
+        InstallationDTO installationDTO = installationService.createInstallation(name, type, description, locationId);
 
         assertTrue(installationRepository.existsById(installationDTO.id()));
 
@@ -73,10 +77,8 @@ public class InstallationServiceTest {
         String description = "description";
         Long locationId = 1L;
 
-        Location location = LocationMapper.toEntity(locationService.getLocationById(locationId));
-
         assertThrows(IllegalArgumentException.class,
-                () -> installationService.createInstallation(name, type, description, location));
+                () -> installationService.createInstallation(name, type, description, locationId));
     }
 
     @Test
@@ -86,9 +88,18 @@ public class InstallationServiceTest {
         String description = "description";
         Long locationId = 1L;
 
-        Location location = LocationMapper.toEntity(locationService.getLocationById(locationId));
-
         assertThrows(IllegalArgumentException.class,
-                () -> installationService.createInstallation(name, type, description, location));
+                () -> installationService.createInstallation(name, type, description, locationId));
+    }
+
+    @Test
+    public void test_getInstallationsWithLocation_normal() {
+
+
+        LocationWithInstallationsDTO installationsDTO =
+                installationService.getInstallationsWithLocation(createdInstallations.getFirst().locationId());
+
+        System.out.println(installationsDTO.installationDTO());
+        assertEquals(3, installationsDTO.installationDTO().size());
     }
 }

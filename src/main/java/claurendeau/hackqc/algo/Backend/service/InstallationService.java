@@ -25,11 +25,13 @@ public class InstallationService {
     LocationRepository locationRepository;
 
 
-    public InstallationDTO createInstallation(String name, String type, String description, Location location) {
-        if (name == null || type == null || description == null || location == null
+    public InstallationDTO createInstallation(String name, String type, String description, Long locationId) {
+        if (name == null || type == null || description == null || locationId == null
         || name.isBlank() || type.isBlank() || description.isBlank()){
             throw new IllegalArgumentException("All fields are required");
         }
+
+        Location location = locationRepository.findById(locationId).orElseThrow(() -> new EntityNotFoundException("Pas de location"));
 
         Installation installation = installationRepository.save(Installation.builder()
                 .name(name)

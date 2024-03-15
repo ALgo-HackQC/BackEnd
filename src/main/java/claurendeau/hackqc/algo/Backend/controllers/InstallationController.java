@@ -6,6 +6,7 @@ import claurendeau.hackqc.algo.Backend.mapper.LocationMapper;
 import claurendeau.hackqc.algo.Backend.modeles.Location;
 import claurendeau.hackqc.algo.Backend.service.InstallationService;
 import claurendeau.hackqc.algo.Backend.service.LocationService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,18 +27,17 @@ public class InstallationController {
 
     @PostMapping("/cree")
     public ResponseEntity<String> createInstallation(@RequestBody InstallationCreatorDTO installationCreatorDTO) {
-        LocationDTO locationDTO = locationService.getLocationById(installationCreatorDTO.locationId());
         try {
-            if (locationDTO == null) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-            Location location = LocationMapper.toEntity(locationDTO);
             installationService.createInstallation(installationCreatorDTO.name(),
                     installationCreatorDTO.type(),
                     installationCreatorDTO.description(),
-                    location);
-        } catch (IllegalArgumentException e) {
+                    installationCreatorDTO.locationId());
+        }
+        catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
 
         return new ResponseEntity<>(HttpStatus.CREATED);

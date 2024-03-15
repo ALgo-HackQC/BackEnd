@@ -45,7 +45,7 @@ public class InstallationControllerTest {
 
         createdInstallations.forEach((installationCreatorDTO) -> installationService.createInstallation(
                 installationCreatorDTO.name(), installationCreatorDTO.type(),
-                installationCreatorDTO.description(), location));
+                installationCreatorDTO.description(), installationCreatorDTO.locationId()));
     }
 
     @Test
