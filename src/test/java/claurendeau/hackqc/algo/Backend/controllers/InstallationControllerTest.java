@@ -3,9 +3,11 @@ package claurendeau.hackqc.algo.Backend.controllers;
 import claurendeau.hackqc.algo.Backend.dto.InstallationCreatorDTO;
 import claurendeau.hackqc.algo.Backend.mapper.LocationMapper;
 import claurendeau.hackqc.algo.Backend.modeles.Location;
+import claurendeau.hackqc.algo.Backend.repository.LocationRepository;
 import claurendeau.hackqc.algo.Backend.service.InstallationService;
 import claurendeau.hackqc.algo.Backend.service.LocationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.antlr.v4.runtime.misc.LogManager;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -35,13 +37,18 @@ public class InstallationControllerTest {
     @Autowired
     LocationService locationService;
 
+    @Autowired
+    LocationRepository locationRepository;
+
     List<InstallationCreatorDTO> createdInstallations = new ArrayList<>();
+
+    List<Long> locationIds = new ArrayList<>();
 
     @BeforeAll
     void initialisation() {
-        createdInstallations.add(new InstallationCreatorDTO("name", "type", "description", 1L));
+        locationIds.add(locationRepository.save(new Location("parc45")).getId());
 
-        Location location = LocationMapper.toEntity(locationService.getLocationById(1L));
+        createdInstallations.add(new InstallationCreatorDTO("name " + locationIds.getFirst(), "type", "description", locationIds.getFirst()));
 
         createdInstallations.forEach((installationCreatorDTO) -> installationService.createInstallation(
                 installationCreatorDTO.name(), installationCreatorDTO.type(),
@@ -51,7 +58,7 @@ public class InstallationControllerTest {
     @Test
     public void test_createInstallation_normal() throws Exception {
 
-        InstallationCreatorDTO installationCreatorDTO = new InstallationCreatorDTO("name", "type", "description", 1L);
+        InstallationCreatorDTO installationCreatorDTO = new InstallationCreatorDTO("name", "type", "description", locationIds.getFirst());
         String installationCreatorDTOString = om.writeValueAsString(installationCreatorDTO);
 
         mockMvc.perform(post("/installation/cree")
@@ -63,7 +70,7 @@ public class InstallationControllerTest {
     @Test
     public void test_createInstallation_valeurNull() throws Exception {
 
-        InstallationCreatorDTO installationCreatorDTO = new InstallationCreatorDTO(null, "type", "description", 1L);
+        InstallationCreatorDTO installationCreatorDTO = new InstallationCreatorDTO(null, "type", "description", locationIds.getFirst());
         String installationCreatorDTOString = om.writeValueAsString(installationCreatorDTO);
 
         mockMvc.perform(post("/installation/cree")
@@ -75,7 +82,7 @@ public class InstallationControllerTest {
     @Test
     public void test_createInstallation_valeurVide() throws Exception {
 
-        InstallationCreatorDTO installationCreatorDTO = new InstallationCreatorDTO("", "type", "description", 1L);
+        InstallationCreatorDTO installationCreatorDTO = new InstallationCreatorDTO("", "type", "description", locationIds.getFirst());
         String installationCreatorDTOString = om.writeValueAsString(installationCreatorDTO);
 
         mockMvc.perform(post("/installation/cree")

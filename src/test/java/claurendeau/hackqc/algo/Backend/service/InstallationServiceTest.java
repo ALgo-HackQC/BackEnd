@@ -35,18 +35,19 @@ public class InstallationServiceTest {
     LocationRepository locationRepository;
 
     List<InstallationCreatorDTO> createdInstallations = new ArrayList<>();
+    List<Long> locationID = new ArrayList<>();
 
     @BeforeAll
     void initialisation() {
 
         Long id = locationRepository.save(new Location("parc")).getId();
         Long id2 = locationRepository.save(new Location("parc2")).getId();
+        locationID.add(id);
+        locationID.add(id2);
 
-        createdInstallations.add(new InstallationCreatorDTO("name", "type", "description", id));
-        createdInstallations.add(new InstallationCreatorDTO("name2", "type2", "description2", id));
-        createdInstallations.add(new InstallationCreatorDTO("name3", "type3", "description3", id2));
-
-        Location location = LocationMapper.toEntity(locationService.getLocationById(1L));
+        createdInstallations.add(new InstallationCreatorDTO("name " + id, "type", "description", id));
+        createdInstallations.add(new InstallationCreatorDTO("name2 " + id, "type2", "description2", id));
+        createdInstallations.add(new InstallationCreatorDTO("name3 " + id2, "type3", "description3", id2));
 
         createdInstallations.forEach((installationCreatorDTO) -> installationService.createInstallation(
                 installationCreatorDTO.name(), installationCreatorDTO.type(),
@@ -58,7 +59,7 @@ public class InstallationServiceTest {
         String name = "name";
         String type = "type";
         String description = "description";
-        Long locationId = 1L;
+        Long locationId = locationID.get(1);
 
 
         InstallationDTO installationDTO = installationService.createInstallation(name, type, description, locationId);
@@ -75,7 +76,7 @@ public class InstallationServiceTest {
         String name = null;
         String type = "type";
         String description = "description";
-        Long locationId = 1L;
+        Long locationId = locationID.getFirst();
 
         assertThrows(IllegalArgumentException.class,
                 () -> installationService.createInstallation(name, type, description, locationId));
@@ -86,7 +87,7 @@ public class InstallationServiceTest {
         String name = "";
         String type = "type";
         String description = "description";
-        Long locationId = 1L;
+        Long locationId = locationID.getFirst();
 
         assertThrows(IllegalArgumentException.class,
                 () -> installationService.createInstallation(name, type, description, locationId));
@@ -98,8 +99,9 @@ public class InstallationServiceTest {
 
         LocationWithInstallationsDTO installationsDTO =
                 installationService.getInstallationsWithLocation(createdInstallations.getFirst().locationId());
+        System.out.println(installationsDTO);
 
         System.out.println(installationsDTO.installationDTO());
-        assertEquals(3, installationsDTO.installationDTO().size());
+        assertEquals(2, installationsDTO.installationDTO().size());
     }
 }
