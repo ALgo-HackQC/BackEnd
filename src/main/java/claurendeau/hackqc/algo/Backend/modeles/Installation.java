@@ -34,10 +34,10 @@ public class Installation {
     private Location location;
 
     @Column(name = "VOTES_FOR")
-    private Long votesPour;
+    private int votesPour;
 
     @Column(name = "VOTES_AGAINST")
-    private Long votesContre;
+    private int votesContre;
 
     public Installation(String name, String type, String description) {
         this.name = name;
