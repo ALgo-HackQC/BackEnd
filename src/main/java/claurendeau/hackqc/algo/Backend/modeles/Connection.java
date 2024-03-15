@@ -4,8 +4,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
-import java.sql.Date;
+import java.util.Date;
+
 
 @Entity
 @Table(name = "CONNECTIONS")
@@ -13,14 +15,13 @@ import java.sql.Date;
 @NoArgsConstructor
 @Getter
 @ToString
+@SuperBuilder
 public class Connection {
-
-    @Id
-    @GeneratedValue
-    @Column(name = "ID")
-    private Long id;
+    public final static int TOKEN_TIME_TO_LIVE_HOURS = 5;
 
     @Column(name = "TOKEN")
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String token;
 
     @Column(name = "ISSUE_DATE")
