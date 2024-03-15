@@ -8,6 +8,10 @@ public class LocationMapper {
         return new LocationDTO(location.getId(), location.getLatitude(), location.getLongitude());
     }
     public static Location toEntity(LocationDTO locationDTO) {
-        return new Location(locationDTO.latitude(), locationDTO.longitude());
+        return Location.builder()
+                .id(locationDTO.id())
+                .latitude(locationDTO.latitude())
+                .longitude(locationDTO.longitude())
+                .build();
     }
 }

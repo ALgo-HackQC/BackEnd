@@ -5,6 +5,7 @@ import claurendeau.hackqc.algo.Backend.dto.InstallationDTO;
 import claurendeau.hackqc.algo.Backend.mapper.LocationMapper;
 import claurendeau.hackqc.algo.Backend.modeles.Location;
 import claurendeau.hackqc.algo.Backend.repository.InstallationRepository;
+import claurendeau.hackqc.algo.Backend.repository.LocationRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,11 +29,17 @@ public class InstallationServiceTest {
     @Autowired
     LocationService locationService;
 
+    @Autowired
+    LocationRepository locationRepository;
+
     List<InstallationCreatorDTO> createdInstallations = new ArrayList<>();
 
     @BeforeAll
     void initialisation() {
-        createdInstallations.add(new InstallationCreatorDTO("name", "type", "description", 1L));
+
+        Long id = locationRepository.save(new Location(90,90)).getId();
+
+        createdInstallations.add(new InstallationCreatorDTO("name", "type", "description", id));
 
         Location location = LocationMapper.toEntity(locationService.getLocationById(1L));
 
