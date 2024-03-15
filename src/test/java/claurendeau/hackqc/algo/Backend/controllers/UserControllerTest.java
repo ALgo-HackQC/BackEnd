@@ -1,13 +1,10 @@
 package claurendeau.hackqc.algo.Backend.controllers;
 
 
-import claurendeau.hackqc.algo.Backend.dto.ConnectionDTO;
 import claurendeau.hackqc.algo.Backend.dto.UserConnectionDTO;
 import claurendeau.hackqc.algo.Backend.dto.UserCreatorDTO;
 import claurendeau.hackqc.algo.Backend.service.UserService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.hibernate.dialect.SpannerSqlAstTranslator;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -33,7 +30,6 @@ public class UserControllerTest {
     
     @Autowired
     UserService userService;
-
 
     List<UserCreatorDTO> createdUsers = new ArrayList<>();
 
