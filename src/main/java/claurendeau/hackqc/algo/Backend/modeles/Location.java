@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.AccessType;
 
 @Entity
@@ -12,6 +13,7 @@ import org.springframework.data.annotation.AccessType;
 @NoArgsConstructor
 @Getter
 @ToString
+@SuperBuilder
 public class Location {
 
     @Id
