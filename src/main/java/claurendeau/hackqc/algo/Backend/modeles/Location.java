@@ -21,7 +21,7 @@ public class Location {
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "NAME")
+    @Column(name = "NOM")
     private String name;
 
     public Location(String name) {
